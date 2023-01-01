@@ -78,10 +78,23 @@ namespace SendMessages
                 var readCounter = 0;
                 var totalLinesCounter = 0;
                 var messageTimeStamp = "";
-                var lines = System.IO.File.ReadLines(filePath);
+                //var lines = System.IO.File.ReadLines(filePath);
 
-                foreach (string line in lines)
+                var reader = new StreamReader(filePath, new FileStreamOptions()
                 {
+                    Mode = FileMode.Open,
+                    Access = FileAccess.Read,
+                    Share = FileShare.Read,
+                    Options = FileOptions.SequentialScan
+                });
+
+                var line = reader.ReadLine();
+
+                while (line != null)
+                {
+
+                //foreach (string line in lines)
+                //{
                     // if it's not long enough to have a time stamp,
                     // we can skip the chat message
                     if (line.Length < 24) 
@@ -132,6 +145,8 @@ namespace SendMessages
                             sentCounter++;
                         }
                     }
+
+                    line = reader.ReadLine();
                 }
 
                 // save the message time stamp of the last message read in from 

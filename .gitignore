@@ -403,3 +403,25 @@ FodyWeavers.xsd
 # Additional files built by Visual Studio
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudio
+<<<<<<< Updated upstream
+/SendMessages.Domain/obj/Debug/net6.0/SendMessages.Domain.assets.cache
+/SendMessages.Domain/obj/Debug/net6.0/SendMessages.Domain.assets.cache
+=======
+/SendMessages.Domain/obj/project.assets.json
+/SendMessages.Domain/obj/SendMessages.Domain.csproj.nuget.dgspec.json
+/SendMessages.Domain/obj/Debug/net6.0/SendMessages.Domain.csproj.FileListAbsolute.txt
+/SendMessages.Domain/obj/Debug/net6.0/SendMessages.Domain.assets.cache
+/SendMessages/obj/Debug/net6.0/SendMessages.csproj.FileListAbsolute.txt
+/SendMessages/obj/Debug/net6.0/SendMessages.assets.cache
+/SendMessages.Domain/obj/SendMessages.Domain.csproj.nuget.dgspec.json
+/SendMessages.Domain/obj/SendMessages.Domain.csproj.nuget.dgspec.json
+/SendMessages.Domain/obj/Debug/net6.0/SendMessages.Domain.csproj.FileListAbsolute.txt
+/SendMessages.Domain/obj/Debug/net6.0/SendMessages.Domain.assets.cache
+/SendMessages.Domain/obj/project.assets.json
+/SendMessages/obj/Debug/net6.0/SendMessages.csproj.FileListAbsolute.txt
+/SendMessages/obj/Debug/net6.0/SendMessages.assets.cache
+>>>>>>> Stashed changes
+/SendMessages.Domain/obj/SendMessages.Domain.csproj.nuget.dgspec.json
+/SendMessages.Domain/obj/project.assets.json
+/SendMessages.Domain/obj/Debug/net6.0/SendMessages.Domain.csproj.FileListAbsolute.txt
+/SendMessages/obj/Debug/net6.0/SendMessages.csproj.FileListAbsolute.txt
