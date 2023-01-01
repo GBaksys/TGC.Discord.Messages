@@ -1,8 +1,6 @@
 ﻿using System.Configuration;
 using System.Globalization;
-using System.Reflection;
 using log4net;
-using log4net.Config;
 using SendMessages.Persistence;
 using SendMessages.Domain;
 
@@ -12,7 +10,7 @@ namespace SendMessages
     {
         private const string DateTimeFormat = "yyyy-MM-dd\\TH:mm:ss.fff";
 
-        private static readonly ILog _log = LogManager.GetLogger(typeof(Program));
+        private static ILog _log = LogManager.GetLogger(typeof(Program));
 
         private static readonly string[] _guildChannelNumbers = (ConfigurationManager.AppSettings["guildchatnumbers"] ?? "")
             .Split(',', StringSplitOptions.TrimEntries & StringSplitOptions.RemoveEmptyEntries);
@@ -27,9 +25,6 @@ namespace SendMessages
 
         static void Main(string[] args)
         {
-            var logRepository = LogManager.GetRepository(Assembly.GetEntryAssembly());
-            XmlConfigurator.Configure(logRepository, new FileInfo("log4netconfig.config"));
-
             try
             {
                 var tempFile = ConfigurationManager.AppSettings["tempfile"];
@@ -66,11 +61,11 @@ namespace SendMessages
             if (string.IsNullOrWhiteSpace(filePath))
                 throw new ArgumentException(nameof(filePath));
 
-            // since we reading in the entire chat log every time this is run
+            // since we are reading in the entire chat log every time this is run
             // it will contain messages we have already processed, so
             // we capture the timestamp of the last message read on the 
             // prior run on this app.   This allows us to only process
-            // those messages with a new time stamp.
+            // those messages with a newer time stamp.
             var lastReadTimeStamp = ConfigurationManager.AppSettings["messagelastreaddatetime"] ?? "";
 
             var lastReadTime = string.IsNullOrWhiteSpace(lastReadTimeStamp)
