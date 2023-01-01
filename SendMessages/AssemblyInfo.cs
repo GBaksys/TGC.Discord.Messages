@@ -1,3 +1,4 @@
+using System.Reflection;
 using System.Runtime.InteropServices;
 
 // In SDK-style projects such as this one, several assembly attributes that were historically
@@ -15,5 +16,5 @@ using System.Runtime.InteropServices;
 // The following GUID is for the ID of the typelib if this project is exposed to COM.
 
 [assembly: Guid("ed884e47-8f1e-4262-a104-ad17bfefb6c5")]
-
-[assembly: log4net.Config.XmlConfigurator(ConfigFile = "log4net.config")]
+[assembly: AssemblyCulture("")]
+[assembly: log4net.Config.XmlConfigurator(ConfigFile="log4net.config", Watch = true)]
