@@ -76,62 +76,70 @@ namespace SendMessages
             {
                 var sentCounter = 0;
                 var readCounter = 0;
-                var totalLinesCounter = 0;
                 var messageTimeStamp = "";
-                var lines = System.IO.File.ReadLines(filePath);
+                var reader = new StreamReader(filePath, 
+                    new FileStreamOptions()
+                    {
+                        Mode = FileMode.Open,
+                        Access = FileAccess.Read,
+                        Share = FileShare.Read,
+                        Options = FileOptions.SequentialScan
+                    });
+                var line = reader.ReadLine();
 
-                foreach (string line in lines)
+                while (line != null)
                 {
                     // if it's not long enough to have a time stamp,
                     // we can skip the chat message
-                    if (line.Length < 24) 
-                        continue;
-
-                    totalLinesCounter++;
-
-                    var messageTime = ConvertTimeStampToDateTime(line.Substring(0, 23));
-
-                    // some of the messages in the chat log don't begin 
-                    // with a timestamp, luckily they are not guild chat messages,
-                    // so we can skip them.
-                    if (messageTime == null)
-                        continue;
-                    else
-                        messageTimeStamp = line.Substring(0, 23);
-                    
-                    readCounter++;
-
-                    // if this app is running for the first time and we don't have a last read time
-                    // or the message timestamp is newer than the last read time 
-                    // process it 
-                    if (lastReadTime == null || messageTime > lastReadTime)
+                    if (line.Length >= 24)
                     {
-                        var chatNumber = line.Substring(30, 2);
 
-                        // post guild chats to Discord
-                        if (_guildChannelNumbers.Contains(chatNumber))
-                        {
-                            _discordClient
-                                .PostGuildChat(new DiscordMessage($"{messageTime} ESO G{int.Parse(chatNumber)-11} - {line.Substring(33)}"))
-                                .Wait();
-                            _messageService
-                                .SaveChatAsync(ConvertToMessage(line))
-                                .Wait();
-                            sentCounter++;
-                        }
+                        var messageTime = ConvertTimeStampToDateTime(line.Substring(0, 23));
 
-                        // post officer chats to Discord
-                        if (_officerChannelNumbers.Contains(chatNumber))
+                        // some of the messages in the chat log don't begin 
+                        // with a timestamp, luckily they are not guild chat messages,
+                        // so we can skip them.
+                        if (messageTime != null)
                         {
-                            _discordClient
-                                .PostOfficerChat(new DiscordMessage($"{messageTime} ESO O{int.Parse(chatNumber)-16} - {line.Substring(33)}"))
-                                .Wait();
-                            _messageService
-                                .SaveChatAsync(ConvertToMessage(line))
-                                .Wait();
-                            sentCounter++;
+                            messageTimeStamp = line.Substring(0, 23);
+
+                            readCounter++;
+
+                            // if this app is running for the first time and we don't have a last read time
+                            // or the message timestamp is newer than the last read time 
+                            // process it 
+                            if (lastReadTime == null || messageTime > lastReadTime)
+                            {
+                                var chatNumber = line.Substring(30, 2);
+
+                                // post guild chats to Discord
+                                if (_guildChannelNumbers.Contains(chatNumber))
+                                {
+                                    _discordClient
+                                        .PostGuildChat(new DiscordMessage($"{messageTime} ESO G{int.Parse(chatNumber) - 11} - {line.Substring(33)}"))
+                                        .Wait();
+                                    _messageService
+                                        .SaveChatAsync(ConvertToMessage(line))
+                                        .Wait();
+                                    sentCounter++;
+                                }
+
+                                // post officer chats to Discord
+                                if (_officerChannelNumbers.Contains(chatNumber))
+                                {
+                                    _discordClient
+                                        .PostOfficerChat(new DiscordMessage($"{messageTime} ESO O{int.Parse(chatNumber) - 16} - {line.Substring(33)}"))
+                                        .Wait();
+                                    _messageService
+                                        .SaveChatAsync(ConvertToMessage(line))
+                                        .Wait();
+                                    sentCounter++;
+                                }
+                            }
                         }
                     }
+
+                    line = reader.ReadLine();
                 }
 
                 // save the message time stamp of the last message read in from 
